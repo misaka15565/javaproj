@@ -17,4 +17,9 @@ public class JavaprojApplication {
 	public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
 		return String.format("Hello %s!", name);
 	}
+	@GetMapping("/gettime")
+	public String getTime() {
+		String time=new java.text.SimpleDateFormat("HH:mm:ss").format(new java.util.Date());
+		return String.format("Current time:%s", time);
+	}
 }
