@@ -7,46 +7,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import cn.sudoer.javaproj.entity.SysUser;
 import cn.sudoer.javaproj.repository.*;
+import cn.sudoer.javaproj.service.SysUserService;
 @Controller
 public class WebPages {
     @Autowired
-    SysUserRepoSitory sysUserRepoSitory;
+    SysUserRepostory sysUserRepoSitory;
     @GetMapping("")
     public String index(Map<String, Object> model) {
+        SysUserService sysUserService = new SysUserService(sysUserRepoSitory);
         SysUser sysuser = new SysUser();
-        sysuser.setUserName("sudoer");
+        sysuser.setUsername("sudoer");
         sysuser.setPassword("123123");
         sysuser.setEmail("hhj@sudoer.cn");
+        sysUserService.createUser(sysuser);
         model.put("sysuser", sysuser);
-        this.sysUserRepoSitory.saveAndFlush(sysuser);
-        UserEntity user = new UserEntity("sudoer", 18);
-        model.put("user", user);
         return "index";
-    }
-}
-
-class UserEntity {
-    private String userName;
-    private Integer age;
-
-    public UserEntity(String userName, Integer age) {
-        this.userName = userName;
-        this.age = age;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
     }
 }

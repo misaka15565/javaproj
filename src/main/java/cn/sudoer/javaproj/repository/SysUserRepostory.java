@@ -5,5 +5,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 import cn.sudoer.javaproj.entity.SysUser;
 @Repository
-public interface SysUserRepoSitory extends JpaRepository<SysUser, Long>,JpaSpecificationExecutor<SysUser>{
+public interface SysUserRepostory extends JpaRepository<SysUser, Long>,JpaSpecificationExecutor<SysUser>{
+    SysUser findByUsername(String userName);
 }

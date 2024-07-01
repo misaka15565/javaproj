@@ -15,29 +15,29 @@ public class SysUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
-    private String Username;
+    private String username;
     @Column
-    private String Password;
+    private String password;
     @Column
-    private String Email;
+    private String email;
     public SysUser() {
     }
-    public String getUserName() {
-        return Username;
+    public String getUsername() {
+        return username;
     }
-    public void setUserName(String userName) {
-        this.Username = userName;
+    public void setUsername(String userName) {
+        this.username = userName;
     }
     public String getPassword() {
-        return Password;
+        return password;
     }
     public void setPassword(String password) {
-        this.Password = password;
+        this.password = password;
     }
     public String getEmail() {
-        return Email;
+        return email;
     }
     public void setEmail(String email) {
-        this.Email = email;
+        this.email = email;
     }
 }
