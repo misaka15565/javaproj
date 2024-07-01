@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <title>Error Page</title>
+    <title>Login Success</title>
 </head>
 
+
 <body>
-    <h1>Error Page</h1>
-    <div th:text="${error}"></div>
-    <br>
-    <br>
-    <br>
+    <h1>Login Success</h1>
+    <div th:text="${sysuser.getUsername()}"></div>
+    <div th:text="${sysuser.getEmail()}"></div>
 </body>
+
+
 
 <footer>
     <a href="http://beian.miit.gov.cn/" target="_blank">浙ICP备2022031873号-1</a>
@@ -21,3 +21,6 @@
             33040202000885号</a> &nbsp;&nbsp;&nbsp;&nbsp;</span>
 </footer>
 </html>
+
+
+

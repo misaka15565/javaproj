@@ -34,4 +34,12 @@ public class SysUserService {
             return true;
         }
     }
+    public boolean login(String username, String password) {
+        SysUser user = sysUserRepoSitory.findByUsername(username);
+        if (user == null) {
+            return false;
+        } else {
+            return user.getPassword().equals(password);
+        }
+    }
 }

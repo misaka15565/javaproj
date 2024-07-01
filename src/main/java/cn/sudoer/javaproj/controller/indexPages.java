@@ -1,15 +1,18 @@
-package cn.sudoer.javaproj;
+package cn.sudoer.javaproj.controller;
 
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import cn.sudoer.javaproj.entity.SysUser;
-import cn.sudoer.javaproj.repository.*;
+import cn.sudoer.javaproj.repository.SysUserRepostory;
 import cn.sudoer.javaproj.service.SysUserService;
 @Controller
-public class WebPages {
+@RequestMapping("/")
+public class indexPages {
     @Autowired
     SysUserRepostory sysUserRepoSitory;
     @GetMapping("")
@@ -22,5 +25,9 @@ public class WebPages {
         sysUserService.createUser(sysuser);
         model.put("sysuser", sysuser);
         return "index";
+    }
+    @GetMapping("login")
+    public String login(){
+        return "login";
     }
 }

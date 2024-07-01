@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<head>
+    <title>Login and Register</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <form th:action="@{/api/login}" method="post"></form>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <br>
+        <button type="submit">Login</button>
+        <!--这样密码会暴露在请求里，但是已经上了ssl，所以不管了-->
+    </form>
+    
+    <h1>Register</h1>
+    <form th:action="@{/api/register}" method="get">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <br>
+        <button type="submit">Register</button>
+    </form>
+</body>
+<footer>
+    <a href="http://beian.miit.gov.cn/" target="_blank">浙ICP备2022031873号-1</a>
+    <span style="display:block;"><img src="https://s1.ax1x.com/2022/11/14/zAkD2t.png"><a
+            href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33040202000885"
+            style="display:inline-block;text-decoration:none;height:20px;line-height:20px;" target="_blank">浙公网安备
+            33040202000885号</a> &nbsp;&nbsp;&nbsp;&nbsp;</span>
+</footer>
+</html>
