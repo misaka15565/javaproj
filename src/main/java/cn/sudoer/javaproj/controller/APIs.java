@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Cookie;
+import cn.sudoer.javaproj.entity.SysUser;
 import cn.sudoer.javaproj.service.SysUserService;
 import cn.sudoer.javaproj.service.UserCookieService;
 @Controller
@@ -38,6 +39,27 @@ public class APIs {
             return "redirect:/loginSuccess";
         } else {
             return "redirect:/login";
+        }
+    }
+    @GetMapping("/register")
+    public String register(HttpServletRequest request, HttpServletResponse response) {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String email = request.getParameter("email");
+        Logger logger=LoggerFactory.getLogger(this.getClass());
+        logger.trace("username:"+username+" register");
+        if(username==null || password==null || email==null){
+            return "redirect:/register";//返回注册界面
+        }
+        SysUser sysUser = new SysUser();
+        sysUser.setUsername(username);
+        sysUser.setPassword(password);
+        sysUser.setEmail(email);
+        boolean registerSuccess = sysUserService.createUser(sysUser);
+        if (registerSuccess) {
+            return "redirect:/login";
+        } else {
+            return "redirect:/register";
         }
     }
 }

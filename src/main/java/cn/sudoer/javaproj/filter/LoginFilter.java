@@ -43,7 +43,7 @@ public class LoginFilter implements Filter {
         if (userCookieService.checkCookie(authCookie)==false) {
             // 用户未登录，重定向到登录页面或返回错误信息
             LoggerFactory.getLogger(getClass()).trace("user not login");
-            httpResponse.sendRedirect("/login");
+            httpResponse.sendRedirect("/");
             return;
         }
 

@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <head>
-    <title>Login</title>
+    <title>Register</title>
 </head>
 <body>
-    <h1>Login</h1>
-    <form th:action="@{/api/login}" method="get">
+    <h1>Register</h1>
+    <form th:action="@{/api/register}" method="get">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
         <br>
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required>
         <br>
-        <button type="submit">Login</button>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <br>
+        <button type="submit">Register</button>
         <!--这样密码会暴露在请求里，但是已经上了ssl，所以不管了-->
     </form>
     

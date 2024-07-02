@@ -47,4 +47,9 @@ public class indexPages {
     public String loginSuccess(HttpServletRequest request, Map<String, Object> model) {
         return "loginSuccess";
     }
+    @GetMapping("register")
+    public String register(HttpServletRequest request){
+        LoggerFactory.getLogger(this.getClass()).trace(request.getRemoteAddr()+" register page");
+        return "register";
+    }
 }
