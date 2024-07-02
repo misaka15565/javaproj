@@ -2,22 +2,20 @@
 <html>
 
 <head>
-    <title>My First Webpage</title>
+    <title>Cookie Check</title>
 </head>
 
 <body>
-    <div th:text="${sysuser.getUsername()}"></div>
-    <div th:text="${sysuser.getEmail()}"></div>
-    <a href="/login">Login</a>
+    <h1>Cookie Check</h1>
+    <div th:text="${str1}"></div>
+    <div th:text="用户名：+${str2}"></div>
+    <div th:text="有效期至+${str3}"></div>
+    <a href="/">Root</a>
     <br>
-    <a href="/app/cookieCheck">Cookie Check</a>
-
+    <a href="/login">Login</a>
 </body>
 
 <footer>
-    <br>
-    <br>
-    <br>
     <a href="http://beian.miit.gov.cn/" target="_blank">浙ICP备2022031873号-1</a>
     <span style="display:block;"><img src="https://s1.ax1x.com/2022/11/14/zAkD2t.png"><a
             href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33040202000885"

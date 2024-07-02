@@ -6,7 +6,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 
 import cn.sudoer.javaproj.bean.KeyPairBean;
-import cn.sudoer.javaproj.entity.SysUser;
+
 
 @Service
 public class UserCookieService {
@@ -26,14 +26,14 @@ public class UserCookieService {
         return keyPairBean.getKeyPair().getPrivate();
     }
 
-    public String getCookie(SysUser sysuser) {
+    public String getCookie(String username) {
         // 加密
         // 获取当前时间
         long now = System.currentTimeMillis();
         // 计算过期时间
         long expire = now + validTime;
         // 拼接字符串
-        String data = sysuser.getUsername() + "|" + expire;
+        String data = username + "|" + expire;
         // 加密
         return keyPairBean.encrypt(data);
     }
@@ -66,5 +66,17 @@ public class UserCookieService {
             return "";
         }
         return arr[0];
+    }
+    public String getExpireTimeString(String cookie){
+        String data = keyPairBean.decrypt(cookie);
+        if (data == null || data.isEmpty()) {
+            return "";
+        }
+        String[] arr = data.split("\\|");
+        if (arr.length != 2) {
+            return "";
+        }
+        //将时间戳转化为时间字符串
+        return new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date(Long.parseLong(arr[1])));
     }
 }
