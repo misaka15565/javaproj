@@ -36,10 +36,11 @@ public class SysUserService {
     }
     public boolean login(String username, String password) {
         SysUser user = sysUserRepoSitory.findByUsername(username);
+        String hashedPasswordString=SysUser.getHashString(password);
         if (user == null) {
             return false;
         } else {
-            return user.getPassword().equals(password);
+            return user.getPasswordHash().equals(hashedPasswordString);
         }
     }
 }

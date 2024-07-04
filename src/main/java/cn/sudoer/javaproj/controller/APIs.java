@@ -53,7 +53,7 @@ public class APIs {
         }
         SysUser sysUser = new SysUser();
         sysUser.setUsername(username);
-        sysUser.setPassword(password);
+        sysUser.setPasswordHashByClearText(password);
         sysUser.setEmail(email);
         boolean registerSuccess = sysUserService.createUser(sysUser);
         if (registerSuccess) {

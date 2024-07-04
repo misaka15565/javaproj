@@ -17,7 +17,7 @@ public class AppStartupRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
         SysUser sysUser = new SysUser();
         sysUser.setUsername("sudoer");
-        sysUser.setPassword("123456");
+        sysUser.setPasswordHashByClearText("123456");
         sysUser.setEmail("sudoer@sudoer.cn");
         sysUserService.createUser(sysUser);
     }

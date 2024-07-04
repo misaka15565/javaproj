@@ -30,7 +30,7 @@ public class indexPages {
         LoggerFactory.getLogger(getClass()).trace("index page");
         SysUser sysuser = new SysUser();
         sysuser.setUsername("admin");
-        sysuser.setPassword("admin");
+        sysuser.setPasswordHashByClearText("admin");
         sysuser.setEmail("admin@sudoer.cn");
         sysUserService.createUser(sysuser);
         model.put("sysuser", sysuser);
