@@ -4,13 +4,16 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import cn.sudoer.javaproj.entity.SysUser;
+import cn.sudoer.javaproj.entity.UserSettings;
 import cn.sudoer.javaproj.service.SysUserService;
 import cn.sudoer.javaproj.service.UserCookieService;
+import cn.sudoer.javaproj.service.UserSettingsService;
 import jakarta.servlet.http.*;
 
 @Controller
@@ -18,9 +21,11 @@ import jakarta.servlet.http.*;
 public class AppControllers {
     private final UserCookieService userCookieService;
     private final SysUserService sysUserService;
-    public AppControllers(UserCookieService ucs, SysUserService sus) {
+    private final UserSettingsService userSettingsService;
+    public AppControllers(UserCookieService ucs, SysUserService sus, UserSettingsService uss) {
         userCookieService = ucs;
         sysUserService = sus;
+        userSettingsService = uss;
     }
 
     @GetMapping("/cookieCheck")
@@ -56,6 +61,23 @@ public class AppControllers {
     }
     @GetMapping("/menu")
     public String menu(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model) {
+        //获取auth cookie
+        Cookie[] allcookie = request.getCookies();
+        String authCookie = null;
+        if (allcookie != null) {
+            for (Cookie cookie : allcookie) {
+                if (cookie.getName().equals("auth")) {
+                    authCookie = cookie.getValue();
+                    break;
+                }
+            }
+        }else{
+            LoggerFactory.getLogger(getClass()).error("no cookie found");//能访问到这的不应该没auth cookie
+            return "redirect:/";
+        }
+        //从数据库获取用户设置信息
+        UserSettings userSettings = userSettingsService.getUserSettingsByUsername(userCookieService.getUsernameFromCookie(authCookie));
+        model.put("userSettings", userSettings);
         return "app/menu";
     }
 }

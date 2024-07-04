@@ -1,5 +1,6 @@
 package cn.sudoer.javaproj.service;
 
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.stereotype.Service;
 
 import cn.sudoer.javaproj.entity.UserSettings;
@@ -10,13 +11,15 @@ public class UserSettingsService {
     public UserSettingsService(UserSettingsRepostory userSettingsRepostory){
         this.userSettingsRepostory=userSettingsRepostory;
     }
+    public UserSettings getUserSettingsByUsername(String username){
+        return userSettingsRepostory.findByUsername(username);
+    }
 
-
-    void saveUserSettings(UserSettings userSettings){
+    public void saveUserSettings(UserSettings userSettings){
         userSettingsRepostory.saveAndFlush(userSettings);
     }
 
-    void setDefaultSettings(String username){
+    public void setDefaultSettings(String username){
         UserSettings userSettings = new UserSettings();
         userSettings.setUsername(username);
         userSettings.setOperationType("Mixed");

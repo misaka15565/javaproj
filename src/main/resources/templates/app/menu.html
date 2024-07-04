@@ -95,6 +95,48 @@
             <input type="submit" value="Submit">
         </div>
     </form>
+    <!--显示当前用户设置，model里有userSettings对象-->
+    <br>
+    <br>
+    <br>
+    <div style="border: 1px solid black; padding: 10px;">
+        <h2>
+            Current Settings
+        </h2>
+        <div>
+            <label for="operationType">
+                Operation Type:
+            </label>
+            <div th:text="${userSettings.getOperationType()}"></div>
+        </div>
+        <div>
+            <label for="digit">
+                Number of Digits:
+            </label>
+            <div th:text="${userSettings.getNumOfDigits()}"></div>
+        </div>
+        <div>
+            <label for="questionNum">
+                Number of Questions:
+            </label>
+            <div th:text="${userSettings.getNumOfQuestions()}"></div>
+        </div>
+        <div>
+            <label for="timeLimit">
+                Time Limit Enabled:
+            </label>
+            <div th:text="${userSettings.getTimeLimitEnable()}"></div>
+        </div>
+        <div>
+            <label for="timeLimit">
+                Time Limit:
+            </label>
+            <div th:text="${userSettings.getTimeLimit()}"></div>
+        </div>
+    </div>
+
+
+
     <a href="/">
         Root
     </a>
