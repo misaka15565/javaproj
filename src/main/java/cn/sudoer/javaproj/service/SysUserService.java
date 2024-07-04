@@ -4,13 +4,14 @@ import org.springframework.stereotype.Service;
 
 import cn.sudoer.javaproj.entity.SysUser;
 import cn.sudoer.javaproj.repository.SysUserRepostory;
-
+import cn.sudoer.javaproj.service.*;
 @Service
 public class SysUserService {
     private final SysUserRepostory sysUserRepoSitory;
-
-    public SysUserService(SysUserRepostory sysUserRepoSitory) {
+    private final UserSettingsService userSettingsService;
+    public SysUserService(SysUserRepostory sysUserRepoSitory,UserSettingsService userSettingsService) {
         this.sysUserRepoSitory = sysUserRepoSitory;
+        this.userSettingsService=userSettingsService;
     }
 
     public boolean createUser(String username) {
@@ -31,6 +32,7 @@ public class SysUserService {
             return false;
         }else{
             sysUserRepoSitory.saveAndFlush(user);
+            userSettingsService.setDefaultSettings(user.getUsername());
             return true;
         }
     }

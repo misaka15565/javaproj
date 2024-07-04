@@ -1,5 +1,7 @@
 package cn.sudoer.javaproj.controller;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -61,5 +63,21 @@ public class APIs {
         } else {
             return "redirect:/register";
         }
+    }
+    @GetMapping("/changeUserSettings")
+    public String changeUserSettings(HttpServletRequest request, HttpServletResponse response) {
+        //获取所有参数并打印
+        //先获取参数列表
+        Map<String, String[]> map=request.getParameterMap();
+        StringBuilder sb=new StringBuilder();
+        for(String key:map.keySet()){
+            String[] values=map.get(key);
+            for(String value:values){
+                sb.append(key).append(":").append(value).append("\n");
+            }
+        }
+        Logger logger=LoggerFactory.getLogger(this.getClass());
+        logger.trace(sb.toString());
+        return "redirect:/app/menu";
     }
 }

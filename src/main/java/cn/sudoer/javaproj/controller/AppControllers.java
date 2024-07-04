@@ -2,6 +2,8 @@ package cn.sudoer.javaproj.controller;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,5 +53,9 @@ public class AppControllers {
         model.put("str3", str3);
         model.put("str4", str4);
         return "app/cookieCheck";
+    }
+    @GetMapping("/menu")
+    public String menu(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model) {
+        return "app/menu";
     }
 }
