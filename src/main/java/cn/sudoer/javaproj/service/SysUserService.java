@@ -43,4 +43,7 @@ public class SysUserService {
             return user.getPasswordHash().equals(hashedPasswordString);
         }
     }
+    public SysUser getUserByUsername(String username){
+        return sysUserRepoSitory.findByUsername(username);
+    }
 }

@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import cn.sudoer.javaproj.entity.SysUser;
 import cn.sudoer.javaproj.service.SysUserService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 @Controller
 @RequestMapping("/")
 @Component
@@ -23,6 +25,7 @@ public class indexPages {
     @GetMapping("/")
     public String root(HttpServletRequest request){
         LoggerFactory.getLogger(getClass()).trace(request.getRemoteAddr()+" root page");
+        //重定向到index
         return "redirect:/index";
     }
     @GetMapping("/index")
@@ -34,7 +37,6 @@ public class indexPages {
         sysuser.setEmail("admin@sudoer.cn");
         sysUserService.createUser(sysuser);
         model.put("sysuser", sysuser);
-        //如果访问的是根目录，重定向到index.html
         
         return "index";
     }
@@ -51,5 +53,12 @@ public class indexPages {
     public String register(HttpServletRequest request){
         LoggerFactory.getLogger(this.getClass()).trace(request.getRemoteAddr()+" register page");
         return "register";
+    }
+    @GetMapping("logout")
+    public String logout(HttpServletRequest request,HttpServletResponse response){
+        //清除auth cookie
+        response.addCookie(new Cookie("auth",""));
+        LoggerFactory.getLogger(this.getClass()).trace(request.getRemoteAddr()+" logout page");
+        return "logout";
     }
 }

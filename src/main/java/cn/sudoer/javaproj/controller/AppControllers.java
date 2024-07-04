@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import cn.sudoer.javaproj.entity.SysUser;
+import cn.sudoer.javaproj.service.SysUserService;
 import cn.sudoer.javaproj.service.UserCookieService;
 import jakarta.servlet.http.*;
 
@@ -13,9 +15,10 @@ import jakarta.servlet.http.*;
 @RequestMapping("/app")
 public class AppControllers {
     private final UserCookieService userCookieService;
-
-    public AppControllers(UserCookieService ucs) {
+    private final SysUserService sysUserService;
+    public AppControllers(UserCookieService ucs, SysUserService sus) {
         userCookieService = ucs;
+        sysUserService = sus;
     }
 
     @GetMapping("/cookieCheck")
@@ -34,15 +37,19 @@ public class AppControllers {
         String str1 = "null";
         String str2 = "null";
         String str3 = "null";
+        String str4 = "null";
         if (authCookie != null) {
             str1 = userCookieService.checkCookie(authCookie) ? "cookie有效" : "cookie无效";
             str2 = userCookieService.getUsernameFromCookie(authCookie);
             str3 = userCookieService.getExpireTimeString(authCookie);
+            SysUser user=sysUserService.getUserByUsername(str2);
+            str4=user.getEmail();
         }
 
         model.put("str1", str1);
         model.put("str2", str2);
         model.put("str3", str3);
+        model.put("str4", str4);
         return "app/cookieCheck";
     }
 }
