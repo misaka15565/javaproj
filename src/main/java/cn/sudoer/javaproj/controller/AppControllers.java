@@ -2,18 +2,13 @@ package cn.sudoer.javaproj.controller;
 
 import java.util.Map;
 
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import cn.sudoer.javaproj.entity.SysUser;
-import cn.sudoer.javaproj.entity.UserSettings;
-import cn.sudoer.javaproj.service.SysUserService;
-import cn.sudoer.javaproj.service.UserCookieService;
-import cn.sudoer.javaproj.service.UserSettingsService;
+import cn.sudoer.javaproj.entity.*;
+import cn.sudoer.javaproj.service.*;
 import jakarta.servlet.http.*;
 
 @Controller
@@ -79,5 +74,26 @@ public class AppControllers {
         UserSettings userSettings = userSettingsService.getUserSettingsByUsername(userCookieService.getUsernameFromCookie(authCookie));
         model.put("userSettings", userSettings);
         return "app/menu";
+    }
+    @GetMapping("/prepare")//准备页面，用户在此调整设置或者选择开始答题或者选择开始比赛
+    public String prepare(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model) {
+        //获取auth cookie
+        Cookie[] allcookie = request.getCookies();
+        String authCookie = null;
+        if (allcookie != null) {
+            for (Cookie cookie : allcookie) {
+                if (cookie.getName().equals("auth")) {
+                    authCookie = cookie.getValue();
+                    break;
+                }
+            }
+        }else{
+            LoggerFactory.getLogger(getClass()).error("no cookie found");//能访问到这的不应该没auth cookie
+            return "redirect:/";
+        }
+        //从数据库获取用户设置信息
+        UserSettings userSettings = userSettingsService.getUserSettingsByUsername(userCookieService.getUsernameFromCookie(authCookie));
+        model.put("userSettings", userSettings);
+        return "app/prepare";
     }
 }

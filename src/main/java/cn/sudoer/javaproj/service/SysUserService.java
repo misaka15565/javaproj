@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 
 import cn.sudoer.javaproj.entity.SysUser;
 import cn.sudoer.javaproj.repository.SysUserRepostory;
-import cn.sudoer.javaproj.service.*;
 @Service
 public class SysUserService {
     private final SysUserRepostory sysUserRepoSitory;

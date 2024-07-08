@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        Menu Page
+    </title>
+</head>
+<!--菜单网页，用于修改各项设置，有
+运算类型（加减乘除混合）、
+做几位数的运算（1到9位好了）、
+每次出题数量（1-1000题）、
+是否限定时间、
+限定时间的长度（1-60分钟）-->
+
+<body>
+    <h1>
+        Prepare Page
+    </h1>
+    <a href="/app/menu">
+        Change User Settings</a>
+    <!--显示当前用户设置，model里有userSettings对象-->
+    <br>
+    <br>
+    <br>
+    <div style="border: 1px solid black; padding: 10px;">
+        <h2>
+            Current Settings
+        </h2>
+        <div>
+            <label for="operationType">
+                Operation Type:
+            </label>
+            <div th:text="${userSettings.getOperationType()}"></div>
+        </div>
+        <div>
+            <label for="digit">
+                Number of Digits:
+            </label>
+            <div th:text="${userSettings.getNumOfDigits()}"></div>
+        </div>
+        <div>
+            <label for="questionNum">
+                Number of Questions:
+            </label>
+            <div th:text="${userSettings.getNumOfQuestions()}"></div>
+        </div>
+        <div>
+            <label for="timeLimit">
+                Time Limit Enabled:
+            </label>
+            <div th:text="${userSettings.getTimeLimitEnable()}"></div>
+        </div>
+        <div>
+            <label for="timeLimit">
+                Time Limit:
+            </label>
+            <div th:text="${userSettings.getTimeLimit()}"></div>
+        </div>
+    </div>
+
+
+
+    <a href="/">
+        Root
+    </a>
+    <br>
+    <a href="/logout">
+        Logout
+    </a>
+
+
+
+    <iframe name="footer" src="/webfooter.html" width="100%" height="200" frameborder="0" scrolling="no"></iframe>
+
+</html>

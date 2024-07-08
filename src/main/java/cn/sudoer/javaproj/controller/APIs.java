@@ -11,31 +11,37 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Cookie;
 import cn.sudoer.javaproj.entity.SysUser;
-import cn.sudoer.javaproj.service.SysUserService;
-import cn.sudoer.javaproj.service.UserCookieService;
+import cn.sudoer.javaproj.entity.UserSettings;
+import cn.sudoer.javaproj.service.*;
+
 @Controller
 @RequestMapping("/api")
 public class APIs {
     private final SysUserService sysUserService;
     private final UserCookieService userCookieService;
-    public APIs(SysUserService sysUserService,UserCookieService userCookieService) {
+    private final UserSettingsService userSettingsService;
+
+    public APIs(SysUserService sysUserService, UserCookieService userCookieService,
+            UserSettingsService userSettingsService) {
         this.sysUserService = sysUserService;
-        this.userCookieService=userCookieService;
+        this.userCookieService = userCookieService;
+        this.userSettingsService = userSettingsService;
         LoggerFactory.getLogger(getClass()).trace("APIs init");
     }
+
     @GetMapping("/login")
     public String login(HttpServletRequest request, HttpServletResponse response) {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        Logger logger=LoggerFactory.getLogger(this.getClass());
-        logger.trace("username:"+username);
-        if(username==null || password==null){
-            return "redirect:/login";//返回登录界面
+        Logger logger = LoggerFactory.getLogger(this.getClass());
+        logger.trace("username:" + username);
+        if (username == null || password == null) {
+            return "redirect:/login";// 返回登录界面
         }
         boolean loginSuccess = sysUserService.login(username, password);
         if (loginSuccess) {
-            String authCookieString=userCookieService.getCookie(username);
-            Cookie cookie = new Cookie("auth",authCookieString);
+            String authCookieString = userCookieService.getCookie(username);
+            Cookie cookie = new Cookie("auth", authCookieString);
             cookie.setPath("/");
             response.addCookie(cookie);
             return "redirect:/loginSuccess";
@@ -43,15 +49,16 @@ public class APIs {
             return "redirect:/login";
         }
     }
+
     @GetMapping("/register")
     public String register(HttpServletRequest request, HttpServletResponse response) {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String email = request.getParameter("email");
-        Logger logger=LoggerFactory.getLogger(this.getClass());
-        logger.trace("username:"+username+" register");
-        if(username==null || password==null || email==null){
-            return "redirect:/register";//返回注册界面
+        Logger logger = LoggerFactory.getLogger(this.getClass());
+        logger.trace("username:" + username + " register");
+        if (username == null || password == null || email == null) {
+            return "redirect:/register";// 返回注册界面
         }
         SysUser sysUser = new SysUser();
         sysUser.setUsername(username);
@@ -64,20 +71,76 @@ public class APIs {
             return "redirect:/register";
         }
     }
+
     @GetMapping("/changeUserSettings")
     public String changeUserSettings(HttpServletRequest request, HttpServletResponse response) {
-        //获取所有参数并打印
-        //先获取参数列表
-        Map<String, String[]> map=request.getParameterMap();
-        StringBuilder sb=new StringBuilder();
-        for(String key:map.keySet()){
-            String[] values=map.get(key);
-            for(String value:values){
+        // 获取所有参数并打印
+        // 先获取参数列表
+        Map<String, String[]> map = request.getParameterMap();
+        StringBuilder sb = new StringBuilder();
+        for (String key : map.keySet()) {
+            String[] values = map.get(key);
+            for (String value : values) {
                 sb.append(key).append(":").append(value).append("\n");
             }
         }
-        Logger logger=LoggerFactory.getLogger(this.getClass());
+        Logger logger = LoggerFactory.getLogger(this.getClass());
         logger.trace(sb.toString());
+        // 然后获取当前的设置
+        Cookie[] allcookie = request.getCookies();
+        String authCookie = null;
+        if (allcookie != null) {
+            for (Cookie cookie : allcookie) {
+                if (cookie.getName().equals("auth")) {
+                    authCookie = cookie.getValue();
+                    break;
+                }
+            }
+        } else {
+            LoggerFactory.getLogger(getClass()).error("no cookie found");// 能访问到这的不应该没auth cookie
+            return "redirect:/";
+        }
+        // 从数据库获取用户设置信息
+        UserSettings userSettings = userSettingsService
+                .getUserSettingsByUsername(userCookieService.getUsernameFromCookie(authCookie));
+        // 修改设置
+        userSettings.setTimeLimitEnable(false);// 如果复选框不勾选，默认是不发请求的，所以这里先设置为false
+        for (String key : map.keySet()) {
+            String[] values = map.get(key);
+            for (String value : values) {
+                if (key.equals("operationType")) {
+                    userSettings.setOperationType(value);
+                } else if (key.equals("digit")) {
+                    try {
+                        userSettings.setNumOfDigits(Integer.parseInt(value));
+                    } catch (Exception e) {
+                        logger.warn(e.toString());
+                    }
+                } else if (key.equals("questionNum")) {
+                    try {
+                        userSettings.setNumOfQuestions(Integer.parseInt(value));
+                    } catch (Exception e) {
+                        logger.warn(e.toString());
+                    }
+                } else if (key.equals("timeLimitValue")) {
+                    try {
+                        userSettings.setTimeLimit(Integer.parseInt(value));
+                    } catch (Exception e) {
+                        logger.warn(e.toString());
+                    }
+                } else if (key.equals("timeLimit")) {
+                    userSettings.setTimeLimitEnable(value.equals("on"));
+                }
+            }
+        }
+        // 检查时间限制，如果时间限制为0则关闭时间限制
+        if (userSettings.getTimeLimit() == 0) {
+            userSettings.setTimeLimitEnable(false);
+        }
+        if (userSettings.getTimeLimitEnable() == false) {
+            userSettings.setTimeLimit(0);
+        }
+        userSettingsService.saveUserSettings(userSettings);
         return "redirect:/app/menu";
     }
 }

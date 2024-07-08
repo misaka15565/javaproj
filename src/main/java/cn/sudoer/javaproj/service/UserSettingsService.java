@@ -1,6 +1,5 @@
 package cn.sudoer.javaproj.service;
 
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.stereotype.Service;
 
 import cn.sudoer.javaproj.entity.UserSettings;

@@ -4,8 +4,6 @@ import static cn.sudoer.javaproj.entity.QuizType.*;
 
 import org.slf4j.LoggerFactory;
 
-import static cn.sudoer.javaproj.entity.Operator.*;
-
 //单个数学题
 //鉴于是小学生的，答案和题目都是整数
 //不存数据库，所以不用@entity
@@ -101,9 +99,7 @@ public class QuizEntity {
     
 }
 
-enum QuizType {
-    QuizType_ADD, QuizType_SUB, QuizType_MUL, QuizType_DIV, QuizType_MIX
-}
+
 
 enum Operator {
     Operator_ADD, Operator_SUB, Operator_MUL, Operator_DIV
