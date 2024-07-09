@@ -1,5 +1,7 @@
 package cn.sudoer.javaproj.entity;
 
+import org.hibernate.mapping.Map;
+
 import jakarta.persistence.*;
 
 //用户设置数据实体
@@ -14,23 +16,21 @@ public class UserSettings {
     @Column
     private String username;
 
-
-    @Column 
-    private String operationType;//计算类型（加减乘除混合）
+    @Column
+    private String operationType;// 计算类型（加减乘除混合）
 
     @Column
-    private Integer numOfDigits;//数字位数
+    private Integer numOfDigits;// 数字位数
 
     @Column
-    private Integer numOfQuestions;//题目数量
+    private Integer numOfQuestions;// 题目数量
 
     @Column
-    private Boolean timeLimitEnable;//是否开启时间限制
+    private Boolean timeLimitEnable;// 是否开启时间限制
 
     @Column
-    private Integer timeLimit;//时间限制（单位：分钟）
+    private Integer timeLimit;// 时间限制（单位：分钟）
 
-    
     public String getUsername() {
         return username;
     }
@@ -41,6 +41,20 @@ public class UserSettings {
 
     public String getOperationType() {
         return operationType;
+    }
+
+    public QuizType getOperationTypeEnum() {
+        if (operationType.equals("Addition")) {
+            return QuizType.QuizType_ADD;
+        } else if (operationType.equals("Subtraction")) {
+            return QuizType.QuizType_SUB;
+        } else if (operationType.equals("Multiplication")) {
+            return QuizType.QuizType_MUL;
+        } else if (operationType.equals("Division")) {
+            return QuizType.QuizType_DIV;
+        } else {
+            return QuizType.QuizType_MIX;
+        }
     }
 
     public void setOperationType(String operationType) {

@@ -14,39 +14,51 @@ public class QuizEntity {
     private Integer num2;
     private Integer answer;
     private Operator operator;
+
     public QuizType getType() {
         return type;
     }
+
     public void setType(QuizType type) {
         this.type = type;
     }
+
     public Integer getNum1() {
         return num1;
     }
+
     public void setNum1(Integer num1) {
         this.num1 = num1;
     }
+
     public Integer getNum2() {
         return num2;
     }
+
     public void setNum2(Integer num2) {
         this.num2 = num2;
     }
+
     public Integer getAnswer() {
         return answer;
     }
+
     public void setAnswer(Integer answer) {
         this.answer = answer;
     }
+
     public Operator getOperator() {
         return operator;
     }
+
     public void setOperator(Operator operator1) {
         this.operator = operator1;
     }
+
     public String Quiz_toString() {
-        return num1 + operatorStrings[operator.ordinal()] + num2;
+        return num1 + operatorStrings[operator.ordinal()] + num2+"=";
     }
+
     public String Quiz_toStringWithAnswer() {
         return num1 + operatorStrings[operator.ordinal()] + num2 + "=" + answer;
     }
@@ -68,6 +80,7 @@ public class QuizEntity {
                 return 0;
         }
     }
+
     // 题目类型、位数
     // 题目中三个数和答案最多有多少位，至少有一个达到这个位数
     public QuizEntity(QuizType type, Integer numOfDigits) {
@@ -88,18 +101,16 @@ public class QuizEntity {
                 this.answer = this.calcualte(numOfDigits, numOfDigits, this.operator);
             }
         } else if (this.type == QuizType_DIV) {
-            // 除法的结果不能为小数
-            while (this.num1 % this.num2 != 0) {
+            // 除法的结果不能为小数，除数不能为0
+            while (this.num2 == 0 || this.num1 % this.num2 != 0) {
                 this.num1 = (int) (Math.random() * Math.pow(10, numOfDigits));
                 this.num2 = (int) (Math.random() * Math.pow(10, numOfDigits));
                 this.answer = this.calcualte(numOfDigits, numOfDigits, this.operator);
             }
         }
     }
-    
+
 }
-
-
 
 enum Operator {
     Operator_ADD, Operator_SUB, Operator_MUL, Operator_DIV

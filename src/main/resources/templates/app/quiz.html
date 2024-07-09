@@ -11,8 +11,8 @@
     <form action="/api/quizsubmit" method="post">
         <div th:each="quiz,status : ${quizList}">
             <div>
-                <label th:text="${quiz.getQuestion()}"></label>
-                <input type="text" name="answer+${status.index}">
+                <label th:text="${quiz.Quiz_toString()}"></label>
+                <input type="text" name="answer+${status.count}">
             </div>
         </div>
         <button type="submit">Submit</button>

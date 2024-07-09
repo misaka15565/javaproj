@@ -6,6 +6,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 
 import cn.sudoer.javaproj.bean.KeyPairBean;
+import jakarta.servlet.http.Cookie;
 
 
 @Service
@@ -78,5 +79,18 @@ public class UserCookieService {
         }
         //将时间戳转化为时间字符串
         return new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date(Long.parseLong(arr[1])));
+    }
+    public String getUsernameFromCookies(Cookie[] cookies){
+        String authCookie = null;
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("auth")) {
+                    authCookie = cookie.getValue();
+                    break;
+                }
+            }
+        }
+        if(authCookie==null)return null;
+        return getUsernameFromCookie(authCookie);
     }
 }
