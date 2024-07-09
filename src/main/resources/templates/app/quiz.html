@@ -12,7 +12,7 @@
         <div th:each="quiz,status : ${quizList}">
             <div>
                 <label th:text="${quiz.Quiz_toString()}"></label>
-                <input type="text" name="answer+${status.count}">
+                <input type="text" th:name="'answer'+${status.index}">
             </div>
         </div>
         <button type="submit">Submit</button>

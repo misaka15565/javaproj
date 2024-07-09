@@ -1,15 +1,16 @@
 package cn.sudoer.javaproj.controller;
 
-import java.util.Map;
-
+import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Cookie;
+import cn.sudoer.javaproj.entity.QuizEntity;
 import cn.sudoer.javaproj.entity.SysUser;
 import cn.sudoer.javaproj.entity.UserSettings;
 import cn.sudoer.javaproj.service.*;
@@ -20,12 +21,14 @@ public class APIs {
     private final SysUserService sysUserService;
     private final UserCookieService userCookieService;
     private final UserSettingsService userSettingsService;
+    private final QuizService quizService;
 
     public APIs(SysUserService sysUserService, UserCookieService userCookieService,
-            UserSettingsService userSettingsService) {
+            UserSettingsService userSettingsService, QuizService quizService) {
         this.sysUserService = sysUserService;
         this.userCookieService = userCookieService;
         this.userSettingsService = userSettingsService;
+        this.quizService = quizService;
         LoggerFactory.getLogger(getClass()).trace("APIs init");
     }
 
@@ -109,7 +112,7 @@ public class APIs {
             String[] values = map.get(key);
             for (String value : values) {
                 if (key.equals("operationType")) {
-                    userSettings.setOperationType(value);
+                    userSettings.setQuizType(value);
                 } else if (key.equals("digit")) {
                     try {
                         userSettings.setNumOfDigits(Integer.parseInt(value));
@@ -142,5 +145,43 @@ public class APIs {
         }
         userSettingsService.saveUserSettings(userSettings);
         return "redirect:/app/menu";
+    }
+
+    @PostMapping("/quizsubmit")
+    public String quizsubmit(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model) {
+        // 获取所有参数并打印
+        // 先获取参数列表
+        Map<String, String[]> map = request.getParameterMap();
+        StringBuilder sb = new StringBuilder();
+        for (String key : map.keySet()) {
+            String[] values = map.get(key);
+            for (String value : values) {
+                sb.append(key).append(":").append(value).append("\n");
+            }
+        }
+        Logger logger = LoggerFactory.getLogger(this.getClass());
+        logger.trace(sb.toString());
+        //获取用户名
+        String username = userCookieService.getUsernameFromCookies(request.getCookies());
+        //获取题目列表
+        ArrayList<QuizEntity> quizList = quizService.getUserQuizs(username);
+        //计算分数，满分100，四舍六入五凑双
+        int correctcount=0;
+        for(int index=0;index<quizList.size();index++){
+            String answer = request.getParameter("answer"+index);
+            LoggerFactory.getLogger(getClass()).trace("answer "+answer+" "+quizList.get(index).getAnswer());
+            if(answer==null){
+                continue;
+            }
+            if(quizList.get(index).getAnswer().toString().equals(answer)){
+                correctcount++;
+            }
+        }
+        Integer score = (int)(100.0*correctcount/quizList.size()+0.5);
+        LoggerFactory.getLogger(getClass()).trace("score:"+score);
+        model.put("score",score);
+        //保存分数
+        quizService.setUserScore(username, score, 0);
+        return "redirect:/app/judge";
     }
 }

@@ -92,20 +92,20 @@ public class QuizEntity {
         this.operator = Operator.values()[this.type.ordinal()];
         this.num1 = (int) (Math.random() * Math.pow(10, numOfDigits));
         this.num2 = (int) (Math.random() * Math.pow(10, numOfDigits));
-        this.answer = this.calcualte(numOfDigits, numOfDigits, this.operator);
+        this.answer = this.calcualte(this.num1, this.num2, this.operator);
         if (this.type == QuizType_SUB) {
             // 减法的结果不能为负数
             while (this.answer < 0) {
                 this.num1 = (int) (Math.random() * Math.pow(10, numOfDigits));
                 this.num2 = (int) (Math.random() * Math.pow(10, numOfDigits));
-                this.answer = this.calcualte(numOfDigits, numOfDigits, this.operator);
+                this.answer = this.calcualte(this.num1, this.num2, this.operator);
             }
         } else if (this.type == QuizType_DIV) {
             // 除法的结果不能为小数，除数不能为0
             while (this.num2 == 0 || this.num1 % this.num2 != 0) {
                 this.num1 = (int) (Math.random() * Math.pow(10, numOfDigits));
                 this.num2 = (int) (Math.random() * Math.pow(10, numOfDigits));
-                this.answer = this.calcualte(numOfDigits, numOfDigits, this.operator);
+                this.answer = this.calcualte(this.num1, this.num2, this.operator);
             }
         }
     }

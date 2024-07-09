@@ -17,7 +17,7 @@ public class UserSettings {
     private String username;
 
     @Column
-    private String operationType;// 计算类型（加减乘除混合）
+    private String quizType;// 计算类型（加减乘除混合）
 
     @Column
     private Integer numOfDigits;// 数字位数
@@ -39,26 +39,26 @@ public class UserSettings {
         this.username = username;
     }
 
-    public String getOperationType() {
-        return operationType;
+    public String getQuizType() {
+        return quizType;
     }
 
     public QuizType getOperationTypeEnum() {
-        if (operationType.equals("Addition")) {
+        if (quizType.equals("Addition")) {
             return QuizType.QuizType_ADD;
-        } else if (operationType.equals("Subtraction")) {
+        } else if (quizType.equals("Subtraction")) {
             return QuizType.QuizType_SUB;
-        } else if (operationType.equals("Multiplication")) {
+        } else if (quizType.equals("Multiplication")) {
             return QuizType.QuizType_MUL;
-        } else if (operationType.equals("Division")) {
+        } else if (quizType.equals("Division")) {
             return QuizType.QuizType_DIV;
         } else {
             return QuizType.QuizType_MIX;
         }
     }
 
-    public void setOperationType(String operationType) {
-        this.operationType = operationType;
+    public void setQuizType(String operationType) {
+        this.quizType = operationType;
     }
 
     public Integer getNumOfDigits() {

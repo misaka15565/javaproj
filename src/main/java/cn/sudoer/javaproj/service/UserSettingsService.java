@@ -6,22 +6,22 @@ import cn.sudoer.javaproj.entity.UserSettings;
 import cn.sudoer.javaproj.repository.*;;
 @Service
 public class UserSettingsService {
-    private final UserSettingsRepostory userSettingsRepostory;
-    public UserSettingsService(UserSettingsRepostory userSettingsRepostory){
-        this.userSettingsRepostory=userSettingsRepostory;
+    private final UserSettingsRepository userSettingsRepository;
+    public UserSettingsService(UserSettingsRepository userSettingsRepostory){
+        this.userSettingsRepository=userSettingsRepostory;
     }
     public UserSettings getUserSettingsByUsername(String username){
-        return userSettingsRepostory.findByUsername(username);
+        return userSettingsRepository.findByUsername(username);
     }
 
     public void saveUserSettings(UserSettings userSettings){
-        userSettingsRepostory.saveAndFlush(userSettings);
+        userSettingsRepository.saveAndFlush(userSettings);
     }
 
     public void setDefaultSettings(String username){
         UserSettings userSettings = new UserSettings();
         userSettings.setUsername(username);
-        userSettings.setOperationType("Mixed");
+        userSettings.setQuizType("Mixed");
         userSettings.setNumOfDigits(3);
         userSettings.setNumOfQuestions(10);
         userSettings.setTimeLimitEnable(false);

@@ -16,10 +16,13 @@ public class QuizService {
     // 为比赛生成题目后应该将其暂存，保证每个人拿到的题目一样
     private ArrayList<QuizEntity> competitionQuizList;// 这样写是全服只支持一个比赛的，但是算了
     private Map<String, ArrayList<QuizEntity>> userQuizListMap;// 暂存用户的题目
-
-    QuizService() {
+    private Map<String, Integer> userScoreMap;// 暂存用户的分数（真的只是暂存！只存最近一次的）
+    private final UserScoreHistoryService userScoreHistoryService;
+    QuizService(UserScoreHistoryService userScoreHistoryService) {
         this.competitionQuizList = new ArrayList<>();
         this.userQuizListMap = new HashMap<String, ArrayList<QuizEntity>>();
+        this.userScoreMap = new HashMap<String, Integer>();
+        this.userScoreHistoryService = userScoreHistoryService;
     }
 
     private ArrayList<QuizEntity> generateQuizs(int numOfQuestions, int numOfDigits, QuizType type) {
@@ -51,5 +54,14 @@ public class QuizService {
     // 读取比赛题目
     public ArrayList<QuizEntity> getCompetitionQuizs() {
         return this.competitionQuizList;
+    }
+
+    public void setUserScore(String username,Integer score,Integer timeused){
+        this.userScoreMap.put(username, score);
+        //顺便存入数据库
+        userScoreHistoryService.addHistory(username, score, timeused);
+    }
+    public Integer getUserScore(String username){
+        return this.userScoreMap.get(username);
     }
 }

@@ -97,7 +97,22 @@ public class AppControllers {
         // 生成题目
         quizService.generateUserQuizs(username, userSettings.getNumOfQuestions(), userSettings.getNumOfDigits(),
                 userSettings.getOperationTypeEnum());
-        model.put("quizList",quizService.getUserQuizs(username));
+        model.put("quizList", quizService.getUserQuizs(username));
         return "app/quiz";
+    }
+
+    @GetMapping("judge")
+    public String judge(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model) {
+        // 获取用户名
+        String username = userCookieService.getUsernameFromCookies(request.getCookies());
+        // 获取分数
+        Integer score = quizService.getUserScore(username);
+        if (score == null) {
+            LoggerFactory.getLogger(getClass()).error("用户" + username + "没有分数");
+            score = 0;
+        }
+        model.put("score", score);
+
+        return "app/judge";
     }
 }

@@ -3,13 +3,13 @@ package cn.sudoer.javaproj.service;
 import org.springframework.stereotype.Service;
 
 import cn.sudoer.javaproj.entity.SysUser;
-import cn.sudoer.javaproj.repository.SysUserRepostory;
+import cn.sudoer.javaproj.repository.SysUserRepository;
 import jakarta.servlet.http.Cookie;
 @Service
 public class SysUserService {
-    private final SysUserRepostory sysUserRepoSitory;
+    private final SysUserRepository sysUserRepoSitory;
     private final UserSettingsService userSettingsService;
-    public SysUserService(SysUserRepostory sysUserRepoSitory,UserSettingsService userSettingsService) {
+    public SysUserService(SysUserRepository sysUserRepoSitory,UserSettingsService userSettingsService) {
         this.sysUserRepoSitory = sysUserRepoSitory;
         this.userSettingsService=userSettingsService;
     }
