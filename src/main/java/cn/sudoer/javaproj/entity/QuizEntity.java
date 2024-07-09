@@ -56,7 +56,7 @@ public class QuizEntity {
     }
 
     public String Quiz_toString() {
-        return num1 + operatorStrings[operator.ordinal()] + num2+"=";
+        return num1 + operatorStrings[operator.ordinal()] + num2 + "=";
     }
 
     public String Quiz_toStringWithAnswer() {
@@ -92,7 +92,11 @@ public class QuizEntity {
         this.operator = Operator.values()[this.type.ordinal()];
         this.num1 = (int) (Math.random() * Math.pow(10, numOfDigits));
         this.num2 = (int) (Math.random() * Math.pow(10, numOfDigits));
-        this.answer = this.calcualte(this.num1, this.num2, this.operator);
+        if (!(this.num2 == 0 && this.type == QuizType_MUL)) {
+            this.answer = this.calcualte(this.num1, this.num2, this.operator);
+        } else {
+            this.num2 = 0;// 强制进入else if 的while
+        }
         if (this.type == QuizType_SUB) {
             // 减法的结果不能为负数
             while (this.answer < 0) {
@@ -105,6 +109,9 @@ public class QuizEntity {
             while (this.num2 == 0 || this.num1 % this.num2 != 0) {
                 this.num1 = (int) (Math.random() * Math.pow(10, numOfDigits));
                 this.num2 = (int) (Math.random() * Math.pow(10, numOfDigits));
+                if (this.num2 == 0) {
+                    continue;
+                }
                 this.answer = this.calcualte(this.num1, this.num2, this.operator);
             }
         }

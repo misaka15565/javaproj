@@ -98,6 +98,7 @@ public class AppControllers {
         quizService.generateUserQuizs(username, userSettings.getNumOfQuestions(), userSettings.getNumOfDigits(),
                 userSettings.getOperationTypeEnum());
         model.put("quizList", quizService.getUserQuizs(username));
+        model.put("countdown", userSettings.getTimeLimitEnable() ? userSettings.getTimeLimit() : -1);
         return "app/quiz";
     }
 

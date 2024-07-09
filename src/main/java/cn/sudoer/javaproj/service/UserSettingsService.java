@@ -22,10 +22,10 @@ public class UserSettingsService {
         UserSettings userSettings = new UserSettings();
         userSettings.setUsername(username);
         userSettings.setQuizType("Mixed");
-        userSettings.setNumOfDigits(3);
-        userSettings.setNumOfQuestions(10);
-        userSettings.setTimeLimitEnable(false);
-        userSettings.setTimeLimit(0);
+        userSettings.setNumOfDigits(2);
+        userSettings.setNumOfQuestions(5);
+        userSettings.setTimeLimitEnable(true);
+        userSettings.setTimeLimit(30);
         this.saveUserSettings(userSettings);
     }
 }
