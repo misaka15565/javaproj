@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Quiz Page</title>
+</head>
+
+<body>
+    <!--后端会传进来一个quiz的arraylist，每个quiz占一行，显示题目和输入框-->
+    <h1>Quiz Page</h1>
+    <form action="/api/quizsubmit" method="post">
+        <div th:each="quiz,status : ${quizList}">
+            <div>
+                <label th:text="${quiz.getQuestion()}"></label>
+                <input type="text" name="answer+${status.index}">
+            </div>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+
+
+
+<iframe name="footer" src="/webfooter.html" width="100%" height="200" frameborder="0" scrolling="no"></iframe>
+
+</html>
