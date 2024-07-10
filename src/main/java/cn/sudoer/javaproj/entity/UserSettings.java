@@ -42,8 +42,21 @@ public class UserSettings {
     public String getQuizType() {
         return quizType;
     }
+    public String getQuizTypeCN(){
+        if(quizType.equals("Addition")){
+            return "加法";
+        }else if(quizType.equals("Subtraction")){
+            return "减法";
+        }else if(quizType.equals("Multiplication")){
+            return "乘法";
+        }else if(quizType.equals("Division")){
+            return "除法";
+        }else{
+            return "混合";
+        }
+    }
 
-    public QuizType getOperationTypeEnum() {
+    public QuizType getQuizTypeEnum() {
         if (quizType.equals("Addition")) {
             return QuizType.QuizType_ADD;
         } else if (quizType.equals("Subtraction")) {
@@ -79,6 +92,10 @@ public class UserSettings {
 
     public Boolean getTimeLimitEnable() {
         return timeLimitEnable;
+    }
+
+    public String getTimeLimitEnableCN() {
+        return timeLimitEnable ? "是" : "否";
     }
 
     public void setTimeLimitEnable(Boolean timeLimitEnable) {

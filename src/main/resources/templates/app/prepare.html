@@ -28,35 +28,35 @@
     <br>
     <div style="border: 1px solid black; padding: 10px;">
         <h2>
-            Current Settings
+            当前设置
         </h2>
         <div>
             <label for="operationType">
-                Operation Type:
+                题目类型:
             </label>
-            <div th:text="${userSettings.getQuizType()}"></div>
+            <div th:text="${userSettings.getQuizTypeCN()}"></div>
         </div>
         <div>
             <label for="digit">
-                Number of Digits:
+                数字位数:
             </label>
             <div th:text="${userSettings.getNumOfDigits()}"></div>
         </div>
         <div>
             <label for="questionNum">
-                Number of Questions:
+                题目个数:
             </label>
             <div th:text="${userSettings.getNumOfQuestions()}"></div>
         </div>
         <div>
             <label for="timeLimit">
-                Time Limit Enabled:
+                是否启用时间限制:
             </label>
-            <div th:text="${userSettings.getTimeLimitEnable()}"></div>
+            <div th:text="${userSettings.getTimeLimitEnableCN()}"></div>
         </div>
         <div>
             <label for="timeLimit">
-                Time Limit:
+                时间限制（单位：分钟）:
             </label>
             <div th:text="${userSettings.getTimeLimit()}"></div>
         </div>

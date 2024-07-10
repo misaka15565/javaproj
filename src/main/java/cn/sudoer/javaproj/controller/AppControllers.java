@@ -99,7 +99,7 @@ public class AppControllers {
         UserSettings userSettings = userSettingsService.getUserSettingsByUsername(username);
         // 生成题目
         quizService.generateUserQuizs(username, userSettings.getNumOfQuestions(), userSettings.getNumOfDigits(),
-                userSettings.getOperationTypeEnum());
+                userSettings.getQuizTypeEnum());
         model.put("quizList", quizService.getUserQuizs(username));
         model.put("countdown", userSettings.getTimeLimitEnable() ? userSettings.getTimeLimit() : -1);
         model.put("script", "var t=" + (userSettings.getTimeLimitEnable() ? userSettings.getTimeLimit() : "-1") + ";");// 传递给前端，作为js脚本插入页面
@@ -148,5 +148,13 @@ public class AppControllers {
                 ";values=" + valuesSb.toString() + ";");// 传递给前端，作为js脚本插入页面
 
         return "app/chart";
+    }
+    @GetMapping("/compp")
+    public String compp(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model) {
+        return "app/compp";
+    }
+    @GetMapping("/competition")
+    public String competition(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model) {
+        return "app/competition";
     }
 }

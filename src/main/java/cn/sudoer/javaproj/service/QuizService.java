@@ -60,7 +60,7 @@ public class QuizService {
         return res;
     }
 
-    // 为比赛生成题目（应当只有发起比赛的人调用）
+    // 为比赛生成题目（应当只有比赛服务调用）
     public void generateCompetitionQuizs(int numOfQuestions, int numOfDigits, QuizType type) {
         this.competitionQuizList = generateQuizs(numOfQuestions, numOfDigits, type);
     }

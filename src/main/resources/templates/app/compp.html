@@ -3,7 +3,90 @@
 
 <html>
 
+<body>
+    <button onclick="createCompetition()">创建比赛</button>
+    <br>
+    <button onclick="addUser()">参加比赛</button>
+    <br>
+    <button onclick="startCompetition()">开始比赛</button>
+    <br>
 
+    <div id="participantList"></div>
+
+    <script>
+        function startCompetition() {
+            fetch('/restapi/Competition/startCompetition', {
+                method: 'GET',
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+
+    <script>
+        function createCompetition() {
+            fetch('/restapi/Competition/createCompetition', {
+                method: 'GET',
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+
+    <script>
+        function addUser() {
+            fetch('/restapi/Competition/addUser', {
+                method: 'GET',
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+
+    <script>
+        setInterval(function () {
+            fetch('/restapi/Competition/getList')
+                .then(response => response.json())
+                .then(data => {
+                    // Update the participant list
+                    document.getElementById('participantList').innerHTML = data.join(', ');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }, 1000);
+    </script>
+    <!--添加一个定时器，定时检查比赛是否开始，如果比赛开始则转到/app/competition-->
+    <script>
+        setInterval(function () {
+            fetch('/restapi/Competition/isCompetitionRunning')
+                .then(response => response.json())
+                .then(data => {
+                    if (data) {
+                        window.location.href = '/app/competition';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }, 1000);
+    </script>
+</body>
 
 
 
