@@ -18,12 +18,15 @@ public class AppControllers {
     private final SysUserService sysUserService;
     private final UserSettingsService userSettingsService;
     private final QuizService quizService;
+    private final UserScoreHistoryService userScoreHistoryService;
 
-    public AppControllers(UserCookieService ucs, SysUserService sus, UserSettingsService uss, QuizService qs) {
+    public AppControllers(UserCookieService ucs, SysUserService sus,
+            UserSettingsService uss, QuizService qs, UserScoreHistoryService ushs) {
         userCookieService = ucs;
         sysUserService = sus;
         userSettingsService = uss;
         quizService = qs;
+        userScoreHistoryService = ushs;
     }
 
     @GetMapping("/cookieCheck")
@@ -99,6 +102,7 @@ public class AppControllers {
                 userSettings.getOperationTypeEnum());
         model.put("quizList", quizService.getUserQuizs(username));
         model.put("countdown", userSettings.getTimeLimitEnable() ? userSettings.getTimeLimit() : -1);
+        model.put("script", "var t=" + (userSettings.getTimeLimitEnable() ? userSettings.getTimeLimit() : "-1") + ";");// 传递给前端，作为js脚本插入页面
         return "app/quiz";
     }
 
@@ -115,5 +119,32 @@ public class AppControllers {
         model.put("score", score);
 
         return "app/judge";
+    }
+
+    @GetMapping("chart")
+    public String chart(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model) {
+        String username = userCookieService.getUsernameFromCookies(request.getCookies());
+        if (username == null) {
+            LoggerFactory.getLogger(getClass()).error("用户未登录");
+            return "redirect:/";
+        }
+        // 获取用户答题历史
+        UserScoreHistoryEntity[] ushearr = userScoreHistoryService.getUserScoreHistoryByUsername(username);
+        StringBuilder tagsSb = new StringBuilder("[");
+        StringBuilder valuesSb = new StringBuilder("[");
+        for (UserScoreHistoryEntity ushe : ushearr) {
+            tagsSb.append("'").append(ushe.getSubmitTime()).append("',");
+            valuesSb.append(ushe.getScore()).append(",");
+        }
+        tagsSb.deleteCharAt(tagsSb.length() - 1).append("]");
+        valuesSb.deleteCharAt(valuesSb.length() - 1).append("]");
+        if (tagsSb.length() == 1) {
+            tagsSb = new StringBuilder("[]");
+            valuesSb = new StringBuilder("[]");
+        }
+        model.put("script", "console.log(123);tags=" + tagsSb.toString() +
+                ";values=" + valuesSb.toString() + ";");// 传递给前端，作为js脚本插入页面
+
+        return "app/chart";
     }
 }

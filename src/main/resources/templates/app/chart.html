@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<script src="/echarts.min.js"></script>
+<title>
+    图表页面
+</title>
+
+<body>
+    <style>
+        #line {
+            width: 400px;
+            height: 400px;
+        }
+    </style>
+    <script th:utext="${script}"></script>
+    <div id="line"></div>
+    <script>
+        // 折线图
+        // 基于准备好的dom，初始化echarts实例
+        var line = echarts.init(document.getElementById('line'));
+        // 指定图表的配置项和数据
+        lineOption = {
+            // 标题
+            title: {
+                text: '成绩历史折线图'
+            },
+            // 图例
+            tooltip: {
+                show: true,
+                trigger: "axis",
+                backgroundColor: "#FFFFFF",
+                // {a}（系列名称），{b}（类目值），{c}（数值）, {d}（无）
+                formatter: "{b}：{c}"
+            },
+            xAxis: {
+                type: 'category',
+                data: tags
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                name: '价格',
+                data: values,
+                type: 'line'
+            }]
+        };
+        line.setOption(lineOption);
+    </script>
+
+</body>
+
+<iframe name="footer" src="/webfooter.html" width="100%" height="200" frameborder="0" scrolling="no"></iframe>
+
+</html>

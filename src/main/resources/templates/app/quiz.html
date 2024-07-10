@@ -17,7 +17,7 @@
         </div>
         <button type="submit">Submit</button>
     </form>
-    <div id="countdown" th:attr="time=${countdowntime}" style="display: none;"></div>
+    <script th:utext="${script}"></script>
     <!--添加一个倒计时-->
     <div>
         <label>Time Left:</label>
@@ -25,23 +25,22 @@
     </div>
     <script>
         console.log("start")
-        var t = document.getElementById("time").innerText;
         console.log("time: " + t)
         //如果时间小于0，就不显示倒计时，并且不执行定时器
         if (t <= 0) {
-            document.getElementById("time").innerText = "无时间限制";
-            return;
-        }
-        document.getElementById("time").innerText = t;
-        var timer = setInterval(function () {
-            t--;
+            document.getElementById("time").innerText = -1;
+        } else {
             document.getElementById("time").innerText = t;
-            if (t == 0) {
-                clearInterval(timer);
-                console.log("Time Limit submit")
-                document.getElementsByTagName("form")[0].submit();
-            }
-        }, 1000);
+            var timer = setInterval(function () {
+                t--;
+                document.getElementById("time").innerText = t;
+                if (t == 0) {
+                    clearInterval(timer);
+                    console.log("Time Limit submit")
+                    document.getElementsByTagName("form")[0].submit();
+                }
+            }, 1000);
+        }
     </script>
 </body>
 
