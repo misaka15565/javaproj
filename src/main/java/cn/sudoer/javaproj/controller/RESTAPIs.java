@@ -122,4 +122,20 @@ public class RESTAPIs {
         }
         return flag;
     }
+
+    @GetMapping("/Competition/getTimeLeft") // 获取剩余时间（秒
+    public Integer getTimeLeft(HttpServletRequest request, HttpServletResponse response) {
+        String username = userCookieService.getUsernameFromCookies(request.getCookies());
+        if (username != null && competitionService.getCompetitionUserList().contains(username)) {
+            Date now = new Date();
+            Date competitionEndTime = competitionService.getCompetitionEndTime();
+            if (now.after(competitionEndTime)) {
+                return 0;
+            } else {
+                LoggerFactory.getLogger(getClass()).trace("剩余时间" + (competitionEndTime.getTime() - now.getTime()) / 1000);
+                return (int) (competitionEndTime.getTime() - now.getTime()) / 1000;
+            }
+        }
+        return 0;
+    }
 }
