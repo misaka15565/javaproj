@@ -117,6 +117,8 @@ public class AppControllers {
             score = 0;
         }
         model.put("score", score);
+        //获取题目列表
+        model.put("quizList", quizService.getUserQuizs(username));
 
         return "app/judge";
     }
