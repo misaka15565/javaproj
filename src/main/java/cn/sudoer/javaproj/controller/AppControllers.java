@@ -170,7 +170,7 @@ public class AppControllers {
             LoggerFactory.getLogger(getClass()).error("用户" + username + "不符合参赛条件");
             return "redirect:/app/compp";
         }
-        model.put("startTime",competitionService.getCompetitionStartTime().getTime());
+        model.put("startTime",competitionService.getCompetitionStartTime());
         model.put("quizList", competitionService.getCompetitionQuizList());
         return "app/competition";
     }

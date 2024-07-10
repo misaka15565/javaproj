@@ -17,6 +17,7 @@ public class CompetitionService {
     private final QuizService quizService;
     private final SysUserService sysUserService;
     private final UserSettingsService userSettingsService;
+    private final UserScoreHistoryService userScoreHistoryService;
     private Map<String, Integer> userScoreMap;
     private Boolean isCompetitionRunning;// 比赛是否正在进行
     // 记录比赛开始的时间
@@ -28,12 +29,14 @@ public class CompetitionService {
     public final Integer gracePeriod = 10 * 1000;
     private Map<String, Boolean> userStatusMap;// 记录用户是否提交过答案，提交过为true
 
-    public CompetitionService(QuizService qs, SysUserService sus, UserSettingsService uss) {
+    public CompetitionService(QuizService qs, SysUserService sus, UserSettingsService uss,
+            UserScoreHistoryService ushs) {
         userScoreMap = new HashMap<>();
         competitionUserSet = new HashSet<>();
         quizService = qs;
         sysUserService = sus;
         userSettingsService = uss;
+        userScoreHistoryService = ushs;
         isCompetitionRunning = false;
         userStatusMap = new HashMap<>();
     }
@@ -114,7 +117,7 @@ public class CompetitionService {
         generateCompetitionQuizs();
         isCompetitionRunning = true;
         userStatusMap.clear();
-        for(String username : competitionUserSet) {
+        for (String username : competitionUserSet) {
             userStatusMap.put(username, false);
         }
     }
@@ -177,6 +180,8 @@ public class CompetitionService {
         userScoreMap.put(username, score);
         userStatusMap.put(username, true);
         LoggerFactory.getLogger(getClass()).trace(username + "得分：" + score);
+        Integer timeused = (int) ((new Date().getTime() - competitionStartTime.getTime()) / 1000);
+        userScoreHistoryService.addHistory(username, score, timeused);
         return score;
     }
 
