@@ -117,6 +117,11 @@ public class QuizEntity {
         }
     }
 
+    public Boolean equals(QuizEntity quiz) {
+        return this.type == quiz.type && this.num1 == quiz.num1 && this.num2 == quiz.num2 &&
+                this.answer == quiz.answer && this.operator == quiz.operator;
+    }
+
 }
 
 enum Operator {

@@ -18,6 +18,7 @@ public class QuizService {
     private Map<String, ArrayList<QuizEntity>> userQuizListMap;// 暂存用户的题目
     private Map<String, Integer> userScoreMap;// 暂存用户的分数（真的只是暂存！只存最近一次的）
     private final UserScoreHistoryService userScoreHistoryService;
+
     QuizService(UserScoreHistoryService userScoreHistoryService) {
         this.competitionQuizList = new ArrayList<>();
         this.userQuizListMap = new HashMap<String, ArrayList<QuizEntity>>();
@@ -29,7 +30,20 @@ public class QuizService {
         ArrayList<QuizEntity> quizList = new ArrayList<>();
         for (int i = 0; i < numOfQuestions; i++) {
             QuizEntity quiz = new QuizEntity(type, numOfDigits);
-            quizList.add(quiz);
+            // 检查是否有相同的quiz
+            boolean flag = true;
+            //效率？不管了
+            for (QuizEntity q : quizList) {
+                if (q.equals(quiz)) {
+                    LoggerFactory.getLogger(QuizService.class).trace("生成了重复的题目");
+                    i--;
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+                quizList.add(quiz);
+            }
         }
         return quizList;
     }
@@ -56,12 +70,13 @@ public class QuizService {
         return this.competitionQuizList;
     }
 
-    public void setUserScore(String username,Integer score,Integer timeused){
+    public void setUserScore(String username, Integer score, Integer timeused) {
         this.userScoreMap.put(username, score);
-        //顺便存入数据库
+        // 顺便存入数据库
         userScoreHistoryService.addHistory(username, score, timeused);
     }
-    public Integer getUserScore(String username){
+
+    public Integer getUserScore(String username) {
         return this.userScoreMap.get(username);
     }
 }
