@@ -160,6 +160,17 @@ public class AppControllers {
 
     @GetMapping("/competition")
     public String competition(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model) {
+        //检查用户是否有资格参加比赛
+        String username = userCookieService.getUsernameFromCookies(request.getCookies());
+        if (username == null) {
+            LoggerFactory.getLogger(getClass()).error("用户未登录");
+            return "redirect:/";
+        }
+        if (!competitionService.checkUser(username)) {
+            LoggerFactory.getLogger(getClass()).error("用户" + username + "不符合参赛条件");
+            return "redirect:/app/compp";
+        }
+        model.put("startTime",competitionService.getCompetitionStartTime().getTime());
         model.put("quizList", competitionService.getCompetitionQuizList());
         return "app/competition";
     }

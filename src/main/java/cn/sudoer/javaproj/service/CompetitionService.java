@@ -114,6 +114,9 @@ public class CompetitionService {
         generateCompetitionQuizs();
         isCompetitionRunning = true;
         userStatusMap.clear();
+        for(String username : competitionUserSet) {
+            userStatusMap.put(username, false);
+        }
     }
 
     public Boolean getIsCompetitionRunning() {
@@ -172,6 +175,7 @@ public class CompetitionService {
         }
         score = (int) ((score / (double) answer.size()) * 100 + 0.5);
         userScoreMap.put(username, score);
+        userStatusMap.put(username, true);
         LoggerFactory.getLogger(getClass()).trace(username + "得分：" + score);
         return score;
     }

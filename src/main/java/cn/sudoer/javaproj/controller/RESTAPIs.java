@@ -148,4 +148,18 @@ public class RESTAPIs {
         }
         return competitionService.checkUser(username);
     }
+
+    @GetMapping("/Competition/getRankList")
+    ArrayList<String> getRankList(HttpServletRequest request, HttpServletResponse response) {
+        return competitionService.getRankList();
+    }
+
+    @GetMapping("/Competition/getCompetitionOwner")
+    String getCompetitionOwner(HttpServletRequest request, HttpServletResponse response) {
+        String res = competitionService.getCompetitionOwner();
+        if (res == null) {
+            res = "";
+        }
+        return res;
+    }
 }

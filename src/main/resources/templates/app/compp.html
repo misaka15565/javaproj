@@ -11,10 +11,28 @@
     <button onclick="startCompetition()">开始比赛</button>
     <br>
     <button onclick="killCompetition()">清除当前比赛</button>
-
+    <br>
+    <div id="CompetitionOwner"></div>
+    <br>
     <h1>参与者列表</h1>
 
     <div id="participantList"></div>
+
+    <script>
+        //每秒从/restapi/Competition/getCompetitionOwner获取比赛创建者
+        setInterval(function () {
+            fetch('/restapi/Competition/getCompetitionOwner')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('CompetitionOwner').innerHTML = '比赛创建者：' + data;
+                    console.log('Success:', data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }, 1000);
+    </script>
+
 
     <script>
         function killCompetition() {
@@ -66,7 +84,7 @@
             fetch('/restapi/Competition/addUser', {
                 method: 'GET',
             })
-                .then(response => response.json())
+                .then(response => response.text())
                 .then(data => {
                     console.log('Success:', data);
                 })

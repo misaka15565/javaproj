@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>
         比赛结果
@@ -20,9 +21,30 @@
     <div th:each="quiz : ${quizList}">
         <div th:text="${quiz.Quiz_toStringWithAnswer()}"></div>
     </div>
+    <div id="rankList"></div>
+    <script>
+        setInterval(() => {
+            fetch('/restapi/Competition/getRankList')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                    var rankListElement = document.getElementById('rankList');
+                    var rankList = data;
+                    var rankListHtml = '<h2>排行榜：</h2>';
+                    for (var i = 0; i < rankList.length; i++) {
+                        rankListHtml += '<div>' + (i + 1) + " " + rankList[i] + '</div>';
+                    }
+                    rankListElement.innerHTML = rankListHtml;
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }, 1000);
+    </script>
 </body>
 
 
 
 <iframe name="footer" src="/webfooter.html" width="100%" height="200" frameborder="0" scrolling="no"></iframe>
+
 </html>
