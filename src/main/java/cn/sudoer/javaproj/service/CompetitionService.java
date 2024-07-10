@@ -26,6 +26,7 @@ public class CompetitionService {
     // 从比赛开始到比赛结束后宽限期结束前，都可以通过api提交答案
     // 宽限期（毫秒）
     public final Integer gracePeriod = 10 * 1000;
+    private Map<String, Boolean> userStatusMap;// 记录用户是否提交过答案，提交过为true
 
     public CompetitionService(QuizService qs, SysUserService sus, UserSettingsService uss) {
         userScoreMap = new HashMap<>();
@@ -34,6 +35,7 @@ public class CompetitionService {
         sysUserService = sus;
         userSettingsService = uss;
         isCompetitionRunning = false;
+        userStatusMap = new HashMap<>();
     }
 
     public void generateCompetitionQuizs() {
@@ -111,6 +113,7 @@ public class CompetitionService {
         competitionEndTime = new Date(competitionStartTime.getTime() + userSettings.getTimeLimit() * 60 * 1000);
         generateCompetitionQuizs();
         isCompetitionRunning = true;
+        userStatusMap.clear();
     }
 
     public Boolean getIsCompetitionRunning() {
@@ -139,6 +142,12 @@ public class CompetitionService {
 
     public Integer submitAnswers(String username, ArrayList<Integer> answer) {
         LoggerFactory.getLogger(getClass()).trace(username + "提交答案");
+        if (!userStatusMap.containsKey(username)) {
+            userStatusMap.put(username, true);
+        } else if (userStatusMap.get(username)) {
+            LoggerFactory.getLogger(getClass()).warn(username + "已经提交过答案");
+            return -1;
+        }
         if (!getIsInGracePeriod()) {
             LoggerFactory.getLogger(getClass()).warn("宽限期已过");
             return -1;
@@ -180,5 +189,16 @@ public class CompetitionService {
 
     public Integer getUserScore(String username) {
         return userScoreMap.get(username);
+    }
+
+    // 检查用户是否有资格进入比赛
+    public Boolean checkUser(String username) {
+        // 用户报名了比赛且还没提交答案而且比赛还开着
+        if (!userStatusMap.containsKey(username)) {
+            userStatusMap.put(username, false);
+        }
+        return getIsCompetitionRunning() &&
+                competitionUserSet.contains(username) &&
+                !userStatusMap.get(username);
     }
 }

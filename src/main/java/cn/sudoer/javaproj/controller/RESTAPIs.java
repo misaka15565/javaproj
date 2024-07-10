@@ -132,10 +132,20 @@ public class RESTAPIs {
             if (now.after(competitionEndTime)) {
                 return 0;
             } else {
-                LoggerFactory.getLogger(getClass()).trace("剩余时间" + (competitionEndTime.getTime() - now.getTime()) / 1000);
+                LoggerFactory.getLogger(getClass())
+                        .trace("剩余时间" + (competitionEndTime.getTime() - now.getTime()) / 1000);
                 return (int) (competitionEndTime.getTime() - now.getTime()) / 1000;
             }
         }
         return 0;
+    }
+
+    @GetMapping("/Competition/checkUser") // 检查用户是否可以进入比赛
+    public Boolean checkUser(HttpServletRequest request, HttpServletResponse response) {
+        String username = userCookieService.getUsernameFromCookies(request.getCookies());
+        if (username == null) {
+            return false;
+        }
+        return competitionService.checkUser(username);
     }
 }

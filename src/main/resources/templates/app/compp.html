@@ -90,10 +90,10 @@
                 });
         }, 1000);
     </script>
-    <!--添加一个定时器，定时检查比赛是否开始，如果比赛开始则转到/app/competition-->
+    <!--添加一个定时器，定时检查用户是否有资格参加比赛且比赛是否已经开始，如果比赛开始则转到/app/competition-->
     <script>
         setInterval(function () {
-            fetch('/restapi/Competition/isCompetitionRunning')
+            fetch('/restapi/Competition/checkUser')
                 .then(response => response.json())
                 .then(data => {
                     if (data) {
