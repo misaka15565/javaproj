@@ -90,7 +90,8 @@ public class CompetitionService {
     public String getCompetitionOwner() {
         return competitionOwner;
     }
-    //杀死比赛（什么也不留
+
+    // 杀死比赛（什么也不留
     public void killCompetition() {
         competitionOwner = null;
         competitionUserSet.clear();
@@ -137,6 +138,7 @@ public class CompetitionService {
     }
 
     public Integer submitAnswers(String username, ArrayList<Integer> answer) {
+        LoggerFactory.getLogger(getClass()).trace(username + "提交答案");
         if (!getIsInGracePeriod()) {
             LoggerFactory.getLogger(getClass()).warn("宽限期已过");
             return -1;
@@ -159,13 +161,14 @@ public class CompetitionService {
                 score++;
             }
         }
-        score = (int) ((score / (double) answer.size() + 0.5) * 100);
+        score = (int) ((score / (double) answer.size()) * 100 + 0.5);
         userScoreMap.put(username, score);
+        LoggerFactory.getLogger(getClass()).trace(username + "得分：" + score);
         return score;
     }
 
-    public ArrayList<String> getRankList(){
-        //按照分数对用户进行排序
+    public ArrayList<String> getRankList() {
+        // 按照分数对用户进行排序
         List<Map.Entry<String, Integer>> list = new ArrayList<>(userScoreMap.entrySet());
         list.sort((o1, o2) -> o2.getValue().compareTo(o1.getValue()));
         ArrayList<String> rankList = new ArrayList<>();
@@ -173,5 +176,9 @@ public class CompetitionService {
             rankList.add(entry.getKey() + " : " + entry.getValue());
         }
         return rankList;
+    }
+
+    public Integer getUserScore(String username) {
+        return userScoreMap.get(username);
     }
 }

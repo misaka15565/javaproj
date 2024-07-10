@@ -10,8 +10,26 @@
     <br>
     <button onclick="startCompetition()">开始比赛</button>
     <br>
+    <button onclick="killCompetition()">清除当前比赛</button>
+
+    <h1>参与者列表</h1>
 
     <div id="participantList"></div>
+
+    <script>
+        function killCompetition() {
+            fetch('/restapi/Competition/killCompetition', {
+                method: 'GET',
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
 
     <script>
         function startCompetition() {
@@ -63,8 +81,9 @@
             fetch('/restapi/Competition/getList')
                 .then(response => response.json())
                 .then(data => {
-                    // Update the participant list
-                    document.getElementById('participantList').innerHTML = data.join(', ');
+                    // Update the participant list, each participant on a new line
+                    var participantsHtml = data.map(participant => `<div>${participant}</div>`).join('');
+                    document.getElementById('participantList').innerHTML = participantsHtml;
                 })
                 .catch(error => {
                     console.error('Error:', error);

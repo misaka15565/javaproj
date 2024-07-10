@@ -1,8 +1,11 @@
 package cn.sudoer.javaproj.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import cn.sudoer.javaproj.service.*;
@@ -69,5 +72,54 @@ public class RESTAPIs {
         } else {
             return false;
         }
+    }
+
+    @GetMapping("/Competition/getCompetitonEndTime")
+    public Date getCompetitionEndTime(HttpServletRequest request, HttpServletResponse response) {
+        return competitionService.getCompetitionEndTime();
+    }
+
+    @PostMapping("/Competition/submitAnswer")
+    public Boolean submitAnswer(HttpServletRequest request, HttpServletResponse response) {
+        String username = userCookieService.getUsernameFromCookies(request.getCookies());
+        if (username == null) {
+            return false;
+        }
+        // 获取问题个数
+        int numOfQuestions = competitionService.getCompetitionQuizList().size();
+        // 从参数列表获取答案
+        ArrayList<Integer> answers = new ArrayList<>();
+        for (int i = 0; i < numOfQuestions; i++) {
+            String answer = request.getParameter("answer" + i);
+            if (answer == null) {
+                return false;
+            }
+            try {
+                answers.add(Integer.parseInt(answer));
+            } catch (Exception e) {
+                LoggerFactory.getLogger(getClass()).trace(username + " 第" + i + "答案格式错误");
+                // 将答案置为-1
+                answers.add(-1);
+            }
+        }
+        // 提交答案
+        return competitionService.submitAnswers(username, answers) != -1;
+    }
+
+    @GetMapping("/Competition/killCompetition")
+    public Boolean killCompetition(HttpServletRequest request, HttpServletResponse response) {
+        String username = userCookieService.getUsernameFromCookies(request.getCookies());
+        Date competitionEndTime = competitionService.getCompetitionEndTime();
+        Date now = new Date();
+        Boolean flag = false;
+        if (username != null && username.equals(competitionService.getCompetitionOwner())) {
+            competitionService.killCompetition();
+            flag = true;
+        } else if (now.after(new Date(competitionEndTime.getTime() + competitionService.gracePeriod + 60 * 1000))) {
+            // 如果上一个比赛的宽限期已经结束超过1分钟
+            competitionService.killCompetition();
+            flag = true;
+        }
+        return flag;
     }
 }

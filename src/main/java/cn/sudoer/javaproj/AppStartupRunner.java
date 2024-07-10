@@ -20,5 +20,10 @@ public class AppStartupRunner implements CommandLineRunner {
         sysUser.setPasswordHashByClearText("123456");
         sysUser.setEmail("sudoer@sudoer.cn");
         sysUserService.createUser(sysUser);
+        SysUser sysUser2 = new SysUser();
+        sysUser2.setUsername("a");
+        sysUser2.setPasswordHashByClearText("a");
+        sysUser2.setEmail("a@sudoer.cn");
+        sysUserService.createUser(sysUser2);
     }
 }

@@ -19,14 +19,17 @@ public class AppControllers {
     private final UserSettingsService userSettingsService;
     private final QuizService quizService;
     private final UserScoreHistoryService userScoreHistoryService;
+    private final CompetitionService competitionService;
 
     public AppControllers(UserCookieService ucs, SysUserService sus,
-            UserSettingsService uss, QuizService qs, UserScoreHistoryService ushs) {
+            UserSettingsService uss, QuizService qs, UserScoreHistoryService ushs,
+            CompetitionService cs) {
         userCookieService = ucs;
         sysUserService = sus;
         userSettingsService = uss;
         quizService = qs;
         userScoreHistoryService = ushs;
+        competitionService = cs;
     }
 
     @GetMapping("/cookieCheck")
@@ -117,7 +120,7 @@ public class AppControllers {
             score = 0;
         }
         model.put("score", score);
-        //获取题目列表
+        // 获取题目列表
         model.put("quizList", quizService.getUserQuizs(username));
 
         return "app/judge";
@@ -149,12 +152,26 @@ public class AppControllers {
 
         return "app/chart";
     }
+
     @GetMapping("/compp")
     public String compp(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model) {
         return "app/compp";
     }
+
     @GetMapping("/competition")
     public String competition(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model) {
+        model.put("quizList", competitionService.getCompetitionQuizList());
         return "app/competition";
     }
+    @GetMapping("/competitionResult")
+    public String competitionResult(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model) {
+        String username = userCookieService.getUsernameFromCookies(request.getCookies());
+        if (username == null) {
+            LoggerFactory.getLogger(getClass()).error("用户未登录");
+            return "redirect:/";
+        }
+        model.put("quizList", competitionService.getCompetitionQuizList());
+        model.put("userScore", competitionService.getUserScore(username));
+        return "app/competitionResult";
+    }    
 }

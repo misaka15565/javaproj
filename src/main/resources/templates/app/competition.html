@@ -1,6 +1,7 @@
 <!--比赛界面-->
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>
         比赛界面
@@ -10,6 +11,43 @@
     比赛界面
 </h1>
 
+<body>
+    <form id="quizForm">
+        <div th:each="quiz,status : ${quizList}">
+            <div>
+                <label th:text="${quiz.Quiz_toString()}"></label>
+                <input type="text" th:name="'answer'+${status.index}">
+            </div>
+        </div>
+        <button type="button" onclick="submitAnswers()">Submit</button>
+    </form>
+
+    <script>
+        function submitAnswers() {
+            // 获取表单数据
+            var formData = new FormData(document.getElementById('quizForm'));
+
+            // 创建异步请求
+            fetch('/restapi/Competition/submitAnswer', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                    // 处理成功响应
+                    //跳转到比赛结果页面
+                    window.location.href = '/app/competitionResult';
+                    
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    // 处理错误
+                });
+        }
+    </script>
+
+</body>
 <iframe name="footer" src="/webfooter.html" width="100%" height="200" frameborder="0" scrolling="no"></iframe>
 
 </html>

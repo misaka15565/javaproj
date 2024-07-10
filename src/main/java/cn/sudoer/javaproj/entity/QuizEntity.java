@@ -66,6 +66,9 @@ public class QuizEntity {
     private final static String[] operatorStrings = { "+", "-", "×", "÷" };// 注意编码问题，÷是除号，不是斜杠
 
     private Integer calcualte(Integer num1, Integer num2, Operator operator) {
+        if (operator == Operator.Operator_DIV && num2 == 0) {
+            LoggerFactory.getLogger(QuizEntity.class).error("Divided by 0");
+        }
         switch (operator) {
             case Operator_ADD:
                 return num1 + num2;
@@ -92,11 +95,11 @@ public class QuizEntity {
         this.operator = Operator.values()[this.type.ordinal()];
         this.num1 = (int) (Math.random() * Math.pow(10, numOfDigits));
         this.num2 = (int) (Math.random() * Math.pow(10, numOfDigits));
-        if (!(this.num2 == 0 && this.type == QuizType_MUL)) {
-            this.answer = this.calcualte(this.num1, this.num2, this.operator);
-        } else {
-            this.num2 = 0;// 强制进入else if 的while
+        if (this.operator == Operator.Operator_DIV) {
+            this.num2 = (int) (Math.random() * (Math.pow(10, numOfDigits) - 1) + 1);
         }
+        this.answer = this.calcualte(this.num1, this.num2, this.operator);
+
         if (this.type == QuizType_SUB) {
             // 减法的结果不能为负数
             while (this.answer < 0) {
