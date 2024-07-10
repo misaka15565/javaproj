@@ -24,6 +24,7 @@
         <label id="time" th:text="${countdown}"></label>
     </div>
     <script>
+        t = t * 60;
         console.log("start")
         console.log("time: " + t)
         //如果时间小于0，就不显示倒计时，并且不执行定时器

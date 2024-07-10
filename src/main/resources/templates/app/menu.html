@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>
         Menu Page
@@ -19,29 +20,29 @@
     <form action="/api/changeUserSettings" method="get">
         <div>
             <label for="operationType">
-                Operation Type:
+                运算类型:
             </label>
             <select name="operationType" id="operationType">
                 <option value="Addition">
-                    Addition
+                    加
                 </option>
                 <option value="Subtraction">
-                    Subtraction
+                    减
                 </option>
                 <option value="Multiplication">
-                    Multiplication
+                    乘
                 </option>
                 <option value="Division">
-                    Division
+                    除
                 </option>
                 <option value="Mixed">
-                    Mixed
+                    混合
                 </option>
             </select>
         </div>
         <div>
             <label for="digit">
-                Number of Digits:
+                数字位数:
             </label>
             <select name="digit" id="digit">
                 <option value="1">
@@ -75,19 +76,19 @@
         </div>
         <div>
             <label for="questionNum">
-                Number of Questions(min 1, max 1000):
+                题目数量(最小 1, 最大 1000):
             </label>
             <input type="number" name="questionNum" id="questionNum" min="1" max="1000">
         </div>
         <div>
             <label for="timeLimit">
-                Time Limit Enabled:
+                是否启用时间限制:
             </label>
             <input type="checkbox" name="timeLimit" id="timeLimit">
         </div>
         <div>
             <label for="timeLimit">
-                Time Limit(min 1, max 60, unit: minute):
+                时间限制(最小 1, 最大 60, 单位：分钟):
             </label>
             <input type="number" name="timeLimitValue" id="timeLimitValue" min="1" max="60">
         </div>
@@ -101,42 +102,43 @@
     <br>
     <div style="border: 1px solid black; padding: 10px;">
         <h2>
-            Current Settings
+            当前的设置：
         </h2>
         <div>
             <label for="operationType">
-                Operation Type:
+                运算类型:
             </label>
             <div th:text="${userSettings.getQuizType()}"></div>
         </div>
         <div>
             <label for="digit">
-                Number of Digits:
+                数字位数:
             </label>
             <div th:text="${userSettings.getNumOfDigits()}"></div>
         </div>
         <div>
             <label for="questionNum">
-                Number of Questions:
+                题目个数:
             </label>
             <div th:text="${userSettings.getNumOfQuestions()}"></div>
         </div>
         <div>
             <label for="timeLimit">
-                Time Limit Enabled:
+                是否启用时间限制:
             </label>
             <div th:text="${userSettings.getTimeLimitEnable()}"></div>
         </div>
         <div>
             <label for="timeLimit">
-                Time Limit:
+                时间限制（单位：分钟）:
             </label>
             <div th:text="${userSettings.getTimeLimit()}"></div>
         </div>
     </div>
 
 
-
+    <a href="/app/prepare">返回准备界面</a>
+    <br>
     <a href="/">
         Root
     </a>
@@ -156,4 +158,5 @@
 
 
 <iframe name="footer" src="/webfooter.html" width="100%" height="200" frameborder="0" scrolling="no"></iframe>
+
 </html>
